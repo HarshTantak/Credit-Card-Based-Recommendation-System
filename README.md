@@ -1,14 +1,6 @@
 
 # 💳 Credit Card-Based Recommendation System
 
-### 🎓 M.Sc. Statistics and Data Science | SVKM’s NMIMS (2022–2024)  
-**Group 14 Members**:  
-- Prashant Srivastava (A068)  
-- Harsh Tantak (A069)  
-- Sandesh Tayde (A070)  
-- Ashwajit Ubale (A071)  
-- Dev Vatnani (A072)  
-👩‍🏫 **Project Guide**: Dr. Kavita Jain
 
 ---
 
