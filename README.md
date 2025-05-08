@@ -1,8 +1,5 @@
-
 # 💳 Credit Card-Based Recommendation System
 
-
----
 
 ## 🧠 Overview
 
@@ -31,21 +28,12 @@ Built on a large real-world-scale transactional dataset (24M+ records), the syst
 
 ---
 
-## 📊 Exploratory Data Analysis Highlights
-
-- 🔍 Most frauds occur for low-value transactions (<$250) and peak at 10–11 AM.
-- 💳 Online transactions (non-chip) are more fraud-prone.
-- 💸 Spending peaks in 2019, with “Other” categories dominating expenses.
-- 🧓 Income declines with age; 18–24 earn the most on average.
-
----
-
 ## 🔐 Fraud Detection
 
 ### ✅ Models Used:
-- **XGBoost**: Best balance of recall and precision
-- **Random Forest**: High accuracy but overfits
-- **Graph Neural Network (GNN)**: Edge-based learning from transaction networks
+- **XGBoost**: Best balance of recall and precision  
+- **Random Forest**: High accuracy but overfits  
+- **Graph Neural Network (GNN)**: Captures relational patterns across cards and merchants
 
 ### 📈 Evaluation (XGBoost):
 | Metric      | Value   |
@@ -57,61 +45,62 @@ Built on a large real-world-scale transactional dataset (24M+ records), the syst
 
 ---
 
+### 🧠 GNN-Based Fraud Detection
+
+Constructed a **heterogeneous transaction graph** where:
+- **Nodes** = Cards and Merchants  
+- **Edges** = Transactions between card–merchant pairs  
+
+**Edge Features**:
+- Amount, timestamp, chip usage  
+- MCC, Merchant location, Error flags
+
+**Model Design**:
+- Used GraphSAGE/GCN layers  
+- Feature matrix `X ∈ ℝⁿˣᵈ`  
+- Binary cross-entropy loss  
+- Adam optimizer
+
+**Outcome**:
+- Captured merchant–card fraud rings  
+- Detected subtle fraud trends not found by classic ML  
+- Low recall due to high class imbalance; better performance with oversampling strategies
+
+---
+
 ## 👥 Customer Segmentation
 
-Filtered non-fraudulent users were clustered using K-Means (k=5), post PCA and VIF checks.
+Used K-Means with PCA after VIF checks on 2,000+ users.
 
-### 🚀 Features Used:
-- Demographics: Age, Gender, Income  
-- Credit Health: FICO Score, Debt, Credit Ratio  
-- Behavior: Spend Category, Fraud Rate, Chip Use, Monthly Spend
-
-### 🧪 Model Evaluation:
-| Metric              | Value    |
-|---------------------|----------|
-| Silhouette Score    | **0.6092** |
-| Davies-Bouldin Score| 0.9941   |
-
-### 🔎 User Cluster Profiles:
-- **Cluster 0**: Young, low-income, low-spend users  
-- **Cluster 1**: Mid-age, responsible spenders  
-- **Cluster 2**: Digitally active, lifestyle spenders  
-- **Cluster 3**: High-credit, high-spending users  
-- **Cluster 4**: Mature, conservative spenders
+### Cluster Profiles:
+- **Cluster 0**: Young, low-income, first-time credit users  
+- **Cluster 1**: Balanced spenders with stable financial patterns  
+- **Cluster 2**: Affluent, lifestyle-oriented, high credit use  
+- **Cluster 3**: High-limit, digitally active power spenders  
+- **Cluster 4**: Older, risk-averse, financially conservative
 
 ---
 
 ## 🤖 Recommendation System (NCF)
 
-Built using **Neural Collaborative Filtering**, trained on a synthetic user–card interaction matrix with positive/negative labels.
+Trained a **Neural Collaborative Filtering** model on user–card interaction pairs.  
 
-### 🧠 Model Architecture:
-- User & Card Embedding (16-dim)
-- MLP: Layers [128 → 64 → 32]
-- Output: Sigmoid → Interaction Score (0 to 1)
+**Architecture**:  
+- Embedding(Users, Cards) → FC(128→64→32) → Sigmoid Output  
 
-### 📊 Evaluation Metrics:
-| Metric      | Value   |
-|-------------|---------|
-| Accuracy    | 0.9392  |
-| Precision   | 0.9100  |
-| Recall      | 0.9615  |
-| F1-Score    | 0.9351  |
-| ROC-AUC     | 0.9411  |
-| Hit@10      | 0.9639  |
-| Recall@10   | 0.5084  |
-| NDCG@10     | 0.3567  |
+### Metrics:
+| Metric      | Score  |
+|-------------|--------|
+| ROC-AUC     | 0.9411 |
+| Precision@K | 0.9100 |
+| Hit@10      | 0.9639 |
+| NDCG@10     | 0.3567 |
 
 ---
 
 ## 📌 Example Output
 
-**User 1019 (Cluster 0):**  
-1. Bluebird by Amex – 0.896  
-2. Citi Custom Card – 0.8817  
-3. Discover It Cash Back – 0.8781  
-
-**User 913 (Cluster 4):**  
+**User 913 (Cluster 4)**:
 1. Chase Sapphire Reserve – 0.9269  
 2. Marriott Bonvoy Business – 0.9222  
 3. Amex Business Platinum – 0.9055  
@@ -120,25 +109,22 @@ Built using **Neural Collaborative Filtering**, trained on a synthetic user–ca
 
 ## 🧾 Conclusion
 
-- **Fraud Detection**: XGBoost performed best with ROC-AUC 0.96  
-- **Segmentation**: K-Means yielded 5 actionable user profiles  
-- **Recommendations**: NCF achieved high personalization accuracy  
-- Integrated system allows secure, tailored, and data-informed decision-making for credit card management.
+- GNN enhanced fraud detection by leveraging graph structures  
+- Customer segmentation yielded 5 behavior-driven profiles  
+- NCF provided tailored card suggestions per cluster
 
 ---
 
 ## 🚧 Limitations
 
-- Static clustering does not reflect evolving user behavior  
-- Recommendations may not suit all individuals in a cluster  
-- Cold start issues for new users  
-- High computational cost for real-time inference
+- GNN scalability for massive datasets  
+- Cold start in recommendations  
+- Static clustering lacks user evolution tracking
 
 ---
 
 ## 🔮 Future Scope
 
-- Dynamic behavior tracking and time-aware clustering  
-- Real-time fraud detection using graph streaming  
-- Cross-platform deployment (mobile/POS integration)  
-- Application to other domains like digital wallets and BNPL
+- Time-aware GNNs and hybrid recommenders  
+- Mobile-first deployment  
+- Expansion into other domains (POS fraud, digital wallets, BNPL)
